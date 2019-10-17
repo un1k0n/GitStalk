@@ -3,6 +3,7 @@ import sys
 
 class GithubUser:
     def __init__(self, username):
+        self.username = username
         self.userUrl = "https://api.github.com/users/{0}".format(username)
         self.repos = []
         self.identities = []
@@ -44,21 +45,24 @@ class GithubUser:
                 print("<+> Dumped: " + repo['full_name'])
 
 def main():
-    if(len(sys.argv) == 2):
-        gitUser = GithubUser(sys.argv[1])
-        if(not gitUser.checkUsername()):
-            print("Not a valid user")
-            return
-        if(gitUser.grabRepos()):
-            print("REPOS LIST")
-            gitUser.showRepos()
-            print("REPOS DUMP")
-            gitUser.stalkRepos()
-            print("REPOS NAMES AND MAILS")
-            for i in gitUser.identities:
-                print(i)
+    if(len(sys.argv) >= 2):
+        for i in range(1,len(sys.argv)):
+            gitUser = GithubUser(sys.argv[i])
+            if(not gitUser.checkUsername()):
+                print("Not a valid user named {0}".format(gitUser.username))
+                continue
+            else:
+                print('--- {0} ---'.format(gitUser.username))
+            if(gitUser.grabRepos()):
+                print("REPOS LIST")
+                gitUser.showRepos()
+                print("REPOS DUMP")
+                gitUser.stalkRepos()
+                print("REPOS NAMES AND MAILS")
+                for identity in gitUser.identities:
+                    print(identity)
     else:
-        print("USAGE: python3 gitstalk.py <USERNAME>")
+        print("USAGE: python3 gitstalk.py <USERNAME_1 ... USERNAME_N>")
     
 if __name__ == "__main__":
     main()
