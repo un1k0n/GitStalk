@@ -13,8 +13,8 @@ class GithubUser:
         return r.status_code == 200
 
     def grabRepos(self): # Grab all repos from a user
-        if(self.checkUsername()):
-            r = requests.get(self.userUrl + "/repos?per_page=100")
+        if (self.checkUsername()):
+            r = requests.get(f"{self.userUrl}/repos?per_page=100")
             if(r.status_code == 200):
                 self.repos = r.json()
                 return True
